@@ -16,9 +16,12 @@ jobs:
         run: |
           docker compose down
           docker compose up -d
-
-      - name: Ruff lint
-        run: python -m ruff check .
+      - name: Install Ruff
+        run: pip install ruff
+     
+      - name: Run Ruff
+        
+        run: ruff check .
 
       - name: Run tests
         run: pytest
