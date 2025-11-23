@@ -1,7 +1,5 @@
 
 
-
-
 # kalamna 
 Multi-Tenant Retrieval-Augmented Generation Platform
 
