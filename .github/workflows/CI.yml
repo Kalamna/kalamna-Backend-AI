@@ -18,7 +18,7 @@ jobs:
           docker compose up -d
 
       - name: Ruff lint
-        run: ruff check .
+        run: python -m ruff check .
 
       - name: Run tests
         run: pytest
