@@ -13,7 +13,7 @@ packages = [
 ]
 
 
-# dependances 
+# dependencies 
 
 [tool.poetry.dependencies]
 python = "^3.12"
