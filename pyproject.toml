@@ -5,7 +5,7 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry]
 name = "kalamna"
 version = "0.1.0"
-description = "Kalamna is an AI-powered Arabic customer support platform for Egyptian SMEs.It delivers smart, emotion-aware chatbots with text and voice support, integrating across WhatsApp, Messenger, and web — powered by ReactJS, FastAPI, LangChain, and PostgreSQL."
+description = "Kalamna is an AI-powered Arabic customer support platform for Egyptian SMEs. It delivers smart, emotion-aware chatbots with text and voice support, integrating across WhatsApp, Messenger, and web — powered by ReactJS, FastAPI, LangChain, and PostgreSQL."
 authors = ["kalamna team"]
 readme = "README.md"
 packages = [
