@@ -16,10 +16,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # Install Python dependencies
 # 1) Copy only requirements first for better Docker layer caching
-COPY requirements.txt .
+
+COPY requirements.txt requirements-dev.txt ./
 
 RUN pip install --no-cache-dir --upgrade pip \
-    && pip install --no-cache-dir -r requirements.txt
+    && pip install --no-cache-dir -r requirements.txt \
+    && pip install --no-cache-dir -r requirements-dev.txt
+
 
 # 2) Now copy the rest of the project
 COPY . .
