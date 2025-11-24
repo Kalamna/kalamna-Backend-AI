@@ -12,16 +12,25 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: run docker 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
         run: |
-          docker compose down
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+
+      - name: Run docker
+        run: |
+          docker compose down || true
           docker compose up -d
-      - name: Install Ruff
-        run: pip install ruff
-     
+
       - name: Run Ruff
-        
-        run: ruff check .
+        run: python -m ruff check .
+        #    ^^^^^^^^^^^^^
+        # use the ruff that was installed by pip for this python
 
       - name: Run tests
-        run: pytest
+        run: python -m pytest
