@@ -15,7 +15,7 @@ app = FastAPI(
     openapi_url="/openapi.json",
 )
 
+
 @app.get("/")
 def hello():
     return {"message": "Hello, World!"}
-
