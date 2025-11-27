@@ -1,17 +1,36 @@
 import os
-import asyncio
-import re
-from sqlalchemy import text
 from dotenv import load_dotenv
-from sqlalchemy.ext.asyncio import create_async_engine
+from sqlalchemy.ext.asyncio import (
+    create_async_engine,
+    async_sessionmaker,
+    AsyncSession,
+)
 
 load_dotenv()
 
-async def async_main() -> None:
-    engine = create_async_engine(re.sub(r'^postgresql:', 'postgresql+asyncpg:', os.getenv('DATABASE_URL')), echo=True)
-    async with engine.connect() as conn:
-        result = await conn.execute(text("select 'hello world'"))
-        print(result.fetchall())
-    await engine.dispose()
+DATABASE_URL = os.getenv("DATABASE_URL")
 
-asyncio.run(async_main())
+if not DATABASE_URL:
+    raise RuntimeError("DATABASE_URL is not set")
+
+
+# ✅ If you're using async ORM, your URL MUST already be async:
+# postgresql+asyncpg://user:pass@host/db
+
+engine = create_async_engine(
+    DATABASE_URL,
+    echo=True,
+    pool_pre_ping=True,
+)
+
+AsyncSessionLocal = async_sessionmaker(
+    engine,
+    expire_on_commit=False,
+    class_=AsyncSession,
+)
+
+
+# ✅ FastAPI dependency
+async def get_db():
+    async with AsyncSessionLocal() as session:
+        yield session
