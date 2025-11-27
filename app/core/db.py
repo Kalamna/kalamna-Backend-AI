@@ -1,21 +1,17 @@
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
-from dotenv import load_dotenv
 import os
+import asyncio
+import re
+from sqlalchemy import text
+from dotenv import load_dotenv
+from sqlalchemy.ext.asyncio import create_async_engine
 
 load_dotenv()
 
-DATABASE_URL = os.getenv("DATABASE_URL")
+async def async_main() -> None:
+    engine = create_async_engine(re.sub(r'^postgresql:', 'postgresql+asyncpg:', os.getenv('DATABASE_URL')), echo=True)
+    async with engine.connect() as conn:
+        result = await conn.execute(text("select 'hello world'"))
+        print(result.fetchall())
+    await engine.dispose()
 
-engine = create_engine(DATABASE_URL)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-Base = declarative_base()
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+asyncio.run(async_main())
