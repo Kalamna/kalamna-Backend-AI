@@ -1,5 +1,3 @@
-Got you — here it is **clean, ready to paste into a `.md` file** ✅ #database for dummies
-
 ## How to Deal with Our Setup in 5 Steps 
 
 1. Go to neon.com  
