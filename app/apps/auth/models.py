@@ -34,10 +34,6 @@ class Business(Base):
         nullable=False,
     )
 
-    hashed_password: Mapped[str] = mapped_column(
-        String(255),
-        nullable=False,
-    )
 
     description: Mapped[str | None] = mapped_column(
         Text,
