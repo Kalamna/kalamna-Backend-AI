@@ -8,6 +8,7 @@ from alembic import context
 from sqlalchemy import pool
 from sqlalchemy.ext.asyncio import async_engine_from_config
 from dotenv import load_dotenv
+from app.db.base import Base
 
 # ✅ Load environment variables
 load_dotenv()
@@ -19,9 +20,6 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-# ✅ Import Base & models
-from app.db.base import Base
-from app.apps.auth.models import Business  # ✅ force import for autogenerate
 
 target_metadata = Base.metadata
 

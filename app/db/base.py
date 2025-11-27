@@ -17,4 +17,5 @@ metadata_obj = MetaData(naming_convention=naming_convention)
 
 class Base(DeclarativeBase):
     """Base class for all ORM models."""
+
     metadata = metadata_obj

@@ -2,6 +2,7 @@
 Authentication database models
 Businesses model with id, email, and hashed_password fields
 """
+
 import uuid
 from datetime import datetime
 
@@ -33,7 +34,6 @@ class Business(Base):
         index=True,
         nullable=False,
     )
-
 
     description: Mapped[str | None] = mapped_column(
         Text,
