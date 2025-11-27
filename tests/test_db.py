@@ -4,8 +4,6 @@ from sqlalchemy import text
 from app.core.db import get_db
 
 
-
-
 @pytest.mark.asyncio
 async def test_raw_session_works():
     # Directly test get_db dependency logic
