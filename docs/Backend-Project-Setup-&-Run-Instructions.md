@@ -19,7 +19,7 @@ pip install -r requirements-dev.txt
 ### **3. Run FastAPI**
 
 ```bash
-uvicorn app.main:app --reload
+uvicorn kalamna.main:kalamna --reload
 ```
 
 ### **4. Open API Documentation**

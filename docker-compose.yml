@@ -19,9 +19,9 @@ services:
 
     # Uncomment this during development only:
     # volumes:
-    #   - .:/app
-    #   - /app/__pycache__
-    #   - /app/app/__pycache__
+    #   - .:/kalamna
+    #   - /kalamna/__pycache__
+    #   - /kalamna/kalamna/__pycache__
     
     # Restart policy for production environments
     restart: unless-stopped

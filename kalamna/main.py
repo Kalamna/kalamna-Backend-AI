@@ -1,11 +1,11 @@
 from fastapi import FastAPI
-from app.core.config import setup_logging
+from kalamna.core.config import setup_logging
 import logging
 
 
 setup_logging()
 
-logger = logging.getLogger("app")
+logger = logging.getLogger("kalamna")
 
 
 app = FastAPI(

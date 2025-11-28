@@ -11,7 +11,7 @@ from sqlalchemy import String, Text, DateTime, Enum as SAEnum
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
-from app.db.base import Base
+from kalamna.db.base import Base
 
 
 class IndustryEnum(Enum):

@@ -1,4 +1,4 @@
-# app/db/migrations/env.py
+# kalamna/db/migrations/env.py
 
 import asyncio
 import os
@@ -8,7 +8,7 @@ from alembic import context
 from sqlalchemy import pool
 from sqlalchemy.ext.asyncio import async_engine_from_config
 from dotenv import load_dotenv
-from app.db.base import Base
+from kalamna.db.base import Base
 
 # ✅ Load environment variables
 load_dotenv()

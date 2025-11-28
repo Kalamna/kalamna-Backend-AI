@@ -36,8 +36,8 @@ to enable the `vector` extension.
    * In `app/db/migrations/env.py` make sure Alembic sees our models:
 
      ```python
-     from app.db.base import Base
-     from app.apps.auth.models import Business  # and any other models, so they are imported
+     from kalamna.db.base import Base
+     from kalamna.apps.auth.models import Business  # and any other models, so they are imported
 
      target_metadata = Base.metadata
      ```

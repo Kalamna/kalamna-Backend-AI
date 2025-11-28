@@ -1,4 +1,4 @@
-# app/db/base.py
+# kalamna/db/base.py
 
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy import MetaData
