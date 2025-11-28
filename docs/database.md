@@ -58,3 +58,4 @@ to enable the `vector` extension.
      alembic revision --autogenerate -m "describe your change"
      alembic upgrade head
      ```
+

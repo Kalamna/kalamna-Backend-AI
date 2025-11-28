@@ -9,7 +9,6 @@ from sqlalchemy import pool
 from sqlalchemy.ext.asyncio import async_engine_from_config
 from dotenv import load_dotenv
 from app.db.base import Base
-from app.apps.auth.models import Business , IndustryEnum  # Import all models here
 
 # ✅ Load environment variables
 load_dotenv()

@@ -6,9 +6,9 @@ services:
     container_name: kalamna-api
     ports:
       - "8000:8000"
-    environment: {}
+    environment:
       
-      #DATABASE_URL: "${DATABASE_URL}"
+      DATABASE_URL: "${DATABASE_URL}"
 
       # JWT config
       #JWT_SECRET: "${JWT_SECRET}"

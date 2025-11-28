@@ -90,3 +90,9 @@ Root endpoint:
 | Fix + Format       | `ruff check . --fix && ruff format .` |
 | Lint specific file | `ruff check path/to/file.py`          |
 ---
+## actions 
+**Notes**
+- To pass linting, run \`ruff check . --fix\`.
+- To apply database migrations, run:
+  - \`alembic revision --autogenerate -m "init db"\`
+  - \`alembic upgrade head\`
