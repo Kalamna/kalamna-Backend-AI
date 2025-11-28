@@ -16,11 +16,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Pre-clean (avoid stale networks/containers)
+        run: docker compose down --remove-orphans || true
+
       - name: Build api image
         run: docker compose build api
 
       - name: Run alembic migrations
-        run: docker compose run --rm api alembic -c alembic.ini upgrade head
+        run: docker compose run --rm api alembic upgrade head
 
       - name: Cleanup
         if: always()
