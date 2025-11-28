@@ -6,11 +6,25 @@ Businesses model with id, email, and hashed_password fields
 import uuid
 from datetime import datetime
 
-from sqlalchemy import String, Text, DateTime
+from sqlalchemy import String, Text, DateTime , Enum as SAEnum
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db.base import Base
+
+
+class IndustryEnum(str, SAEnum):
+    TECHNOLOGY = "Technology"
+    FINANCE = "Finance"
+    HEALTHCARE = "Healthcare"
+    EDUCATION = "Education"
+    RETAIL = "Retail"
+    MANUFACTURING = "Manufacturing"
+    HOSPITALITY = "Hospitality"
+    TRANSPORTATION = "Transportation"
+    REAL_ESTATE = "Real Estate"
+    ENTERTAINMENT = "Entertainment"
+    OTHER = "Other"
 
 
 class Business(Base):
@@ -40,8 +54,8 @@ class Business(Base):
         nullable=True,
     )
 
-    industry: Mapped[str | None] = mapped_column(
-        String(100),
+    industry: Mapped[IndustryEnum | None] = mapped_column(
+        SAEnum(IndustryEnum, native_enum=False),
         nullable=True,
     )
 
