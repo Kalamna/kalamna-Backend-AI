@@ -19,7 +19,7 @@ pip install -r requirements-dev.txt
 ### **3. Run FastAPI**
 
 ```bash
-uvicorn kalamna.main:kalamna --reload
+uvicorn kalamna.main:app --reload
 ```
 
 ### **4. Open API Documentation**
@@ -27,7 +27,7 @@ uvicorn kalamna.main:kalamna --reload
 Swagger UI:
 
 ```
-http://127.0.0.1:8000/doc
+http://127.0.0.1:8000/docs
 ```
 
 ReDoc:
@@ -63,7 +63,7 @@ docker run -p 8000:8000 kalamna-api
 Swagger UI:
 
 ```
-http://127.0.0.1:8000/doc
+http://127.0.0.1:8000/docs
 ```
 
 ReDoc:
