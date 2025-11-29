@@ -1,5 +1,5 @@
 # kalamna/db/migrations/env.py
-
+# ruff: noqa: F401
 import asyncio
 import os
 from logging.config import fileConfig
