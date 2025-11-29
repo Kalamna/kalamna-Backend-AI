@@ -9,13 +9,13 @@ from sqlalchemy import pool
 from sqlalchemy.ext.asyncio import async_engine_from_config
 from dotenv import load_dotenv
 from kalamna.db.base import Base
-# ✅ Load environment variables
+# Load environment variables
 load_dotenv()
 
-# ✅ Alembic config object
+# Alembic config object
 config = context.config
 
-# ✅ Logging config
+# Logging config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
@@ -23,7 +23,7 @@ if config.config_file_name is not None:
 target_metadata = Base.metadata
 
 
-# ✅ Load ASYNC database URL
+# Load ASYNC database URL
 database_url = os.getenv("DATABASE_URL")
 if not database_url:
     raise RuntimeError("DATABASE_URL is not set")
