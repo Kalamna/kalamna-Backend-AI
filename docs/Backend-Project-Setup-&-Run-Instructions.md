@@ -19,7 +19,7 @@ pip install -r requirements-dev.txt
 ### **3. Run FastAPI**
 
 ```bash
-uvicorn app.main:app --reload
+uvicorn kalamna.main:kalamna --reload
 ```
 
 ### **4. Open API Documentation**
@@ -90,3 +90,6 @@ Root endpoint:
 | Fix + Format       | `ruff check . --fix && ruff format .` |
 | Lint specific file | `ruff check path/to/file.py`          |
 ---
+## actions 
+**Notes**
+- To pass linting, run \`ruff check . --fix\`.

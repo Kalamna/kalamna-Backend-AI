@@ -19,7 +19,7 @@ def setup_logging():
                 },
                 "file": {
                     "class": "logging.FileHandler",
-                    "filename": "app.log",
+                    "filename": "kalamna.log",
                     "formatter": "default",
                 },
             },
@@ -28,7 +28,7 @@ def setup_logging():
                     "handlers": ["console"],
                     "level": "INFO",
                 },
-                "app": {
+                "kalamna": {
                     "handlers": ["console", "file"],
                     "level": "INFO",
                     "propagate": False,
