@@ -9,7 +9,7 @@ from sqlalchemy import pool
 from sqlalchemy.ext.asyncio import async_engine_from_config
 from dotenv import load_dotenv
 from kalamna.db.base import Base
-
+from kalamna.apps.auth.models import Business
 # ✅ Load environment variables
 load_dotenv()
 
