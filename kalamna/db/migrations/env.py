@@ -10,6 +10,8 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 from dotenv import load_dotenv
 from kalamna.db.base import Base
 from kalamna.apps.business.models import Business
+from kalamna.apps.employees.models import Employee
+
 # Load environment variables
 load_dotenv()
 
