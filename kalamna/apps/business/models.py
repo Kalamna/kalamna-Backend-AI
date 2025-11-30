@@ -1,5 +1,5 @@
 """
-Authentication database models
+Businesses database models
 Businesses model with id, email, and hashed_password fields
 """
 
@@ -9,7 +9,7 @@ from enum import Enum
 
 from sqlalchemy import String, Text, DateTime, Enum as SAEnum
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from kalamna.db.base import Base
 
@@ -83,6 +83,10 @@ class Business(Base):
         onupdate=lambda: datetime.now(timezone.utc),
         nullable=False,
     )
+    # relationship
+    employees = relationship(
+        "Employee", back_populates="business"
+    )  # ONE business → MANY employees
 
     def __repr__(self) -> str:
         return f"<Business id={self.id} email={self.email!r}>"
