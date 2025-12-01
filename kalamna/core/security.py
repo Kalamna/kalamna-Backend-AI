@@ -7,6 +7,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 JWT_SECRET = os.getenv("JWT_SECRET")
+if not JWT_SECRET: # i have no idea what could happen if this is not set
+    raise ValueError("JWT_SECRET environment variable must be set")
 JWT_ALGORITHM = os.getenv("JWT_ALGORITHM", "HS256")
 
 ACCESS_TTL = timedelta(minutes=15)
