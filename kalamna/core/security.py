@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 JWT_SECRET = os.getenv("JWT_SECRET")
-if not JWT_SECRET: # i have no idea what could happen if this is not set
+if not JWT_SECRET:  # i have no idea what could happen if this is not set
     raise ValueError("JWT_SECRET environment variable must be set")
 JWT_ALGORITHM = os.getenv("JWT_ALGORITHM", "HS256")
 
@@ -59,8 +59,7 @@ def decode_token(token: str, audience: str = None) -> dict:
             audience=audience,
         )
         return payload
-    except jwt.ExpiredSignatureError:
-        raise Exception("Token has expired")
-    except jwt.InvalidTokenError:
-        raise Exception("Invalid token")
-
+    except jwt.ExpiredSignatureError as err:
+        raise Exception("Token has expired") from err
+    except jwt.InvalidTokenError as err:
+        raise Exception("Invalid token") from err
