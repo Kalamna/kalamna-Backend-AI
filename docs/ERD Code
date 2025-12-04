@@ -5,7 +5,7 @@ Table Businesses {
   description text
   industry varchar
   domain_url varchar
-  status varchar            // pending, active, suspended
+  is_verifed boolen           // pending, active, suspended
   owner_id uuid [ref: > employees.id, null]
   email_verified_at timestamp [null]
   created_at timestamp
@@ -45,6 +45,7 @@ Table employees {
   password varchar
   invitation_id uuid [ref: > Invitations.id, null]
   email_verified_at timestamp [null]
+  is_verifed boolen
   is_active boolean [default: true]
   last_login_at timestamp [null]
   role varchar              // 'owner' or 'staff'
