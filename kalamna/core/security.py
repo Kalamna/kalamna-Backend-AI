@@ -68,8 +68,8 @@ def decode_token(token: str, audience: str = None) -> dict:
 
 # password hashing
 pwd_context = CryptContext(
-    schemes=["bcrypt"], deprecated="auto"
-)  # setup password hashing schema with bcrypt
+    schemes=["argon2", "bcrypt"], default="argon2", deprecated="auto"
+)
 
 
 def hash_password(password: str) -> str:
