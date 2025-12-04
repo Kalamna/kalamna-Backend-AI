@@ -24,7 +24,6 @@ Another teammate will handle it — notes included below.
 | name        | yes      | min length 2                                         |
 | email       | yes      | unique                                               |
 | industry    | **yes**  | must be valid IndustryEnum                           |
-| status      | pending  | enum "pending", "active" , "suspended" , "deleted"   |
 | domain_url  | optional | unique                                               |
 | description | optional | text                                                 |
 
@@ -76,8 +75,6 @@ hashed = hash_password(owner_password)
 
 ### **STEP 4 — Create Business**
 
-* status = "pending"
-* owner_id = assigned later
 
 ### **STEP 5 — Create Owner Employee**
 
@@ -150,9 +147,7 @@ GET /auth/verify?token=xyz
     * is_verified = true
     * is_active = true
     * email_verified_at = now()
-5. Update business:
-    * if owner is verified → business.status = "active"
-6. Mark verification_token.used_at = now()
+5. Mark verification_token.used_at = now()
 
 ---
 
@@ -191,7 +186,6 @@ User → POST /auth/register
       → Validate business fields
       → Validate owner fields
       → Hash owner password
-      → Create Business (status=pending)
       → Create Owner Employee (verified=false, active=false)
       → Link owner to business
       → Generate verification token (TO-DO)
