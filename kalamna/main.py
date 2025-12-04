@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from kalamna.core.config import setup_logging
 import logging
+from kalamna.apps.business.routers import router as business_router
 
 
 setup_logging()
@@ -21,3 +22,6 @@ app = FastAPI(
 @app.get("/")
 def hello():
     return {"message": "Hello, World!"}
+
+# include routers
+app.include_router(business_router)
