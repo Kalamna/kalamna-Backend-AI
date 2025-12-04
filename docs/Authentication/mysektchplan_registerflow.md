@@ -86,11 +86,29 @@ hashed = hash_password(owner_password)
 * email_verified_at = null
 * link to business_id
 
+#### json :
+```
+{
+"business": {
+"name": "TechFlow",
+"email": "admin@techflow.com",
+"industry": "TECHNOLOGY",
+"description": "AI services",
+"domain_url": "https://techflow.com"
+},
+"owner": {
+"full_name": "bassant hossam",
+"email": "owner@techflow.com",
+"password": "StrongPass123"
+}
+}
+```
+
 ### **STEP 6 — Generate email verification token (TO-DO)**
 
 (Another teammate will implement, see notes below.)
 
-### **STEP 8 — Return Registration Response**
+### **STEP 7 — Return Registration Response**
 
 ```
 {

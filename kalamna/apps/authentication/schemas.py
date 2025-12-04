@@ -1,10 +1,8 @@
-"""
-Organization Pydantic schemas
-Request/response schemas for organization CRUD operations
-"""
 
 from typing import Literal
 from pydantic import BaseModel
+from kalamna.apps.business.schemas import BusinessCreateSchema
+from kalamna.apps.employees.schemas import OwnerCreateSchema
 
 
 class TokenResponse(BaseModel):
@@ -15,3 +13,9 @@ class TokenResponse(BaseModel):
 
 class RefreshTokenRequest(BaseModel):
     refresh_token: str
+
+
+class RegisterSchema(BaseModel):
+    business: BusinessCreateSchema
+    owner: OwnerCreateSchema
+    #maybe will add model config for swagger
