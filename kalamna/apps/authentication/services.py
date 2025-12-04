@@ -36,7 +36,6 @@ async def register_business_and_owner(data: RegisterSchema, db: AsyncSession):
         raise ValueError("Employee email already exists")
 
     # Create Business
-    print("DEBUG domain_url:", b.domain_url, type(b.domain_url))
     business = Business(
         name=b.name,
         email=b.email,
