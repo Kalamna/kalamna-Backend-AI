@@ -45,39 +45,9 @@ Another teammate will handle it — notes included below.
 
 We want the system **secure and scalable**, so recommend these hashing libraries:
 
-### **Option A — bcrypt (recommended, industry standard)**
+### ** bcrypt (industry standard)**
 
 Strength: Very secure, widely used, recommended for FastAPI.
-
-FastAPI example:
-
-```python
-from passlib.context import CryptContext
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-def hash_password(password: str):
-    return pwd_context.hash(password)
-```
-
-### **Option B — Argon2 (most secure but slower)**
-
-Best when security > performance.
-
-```python
-pwd_context = CryptContext(schemes=["argon2"])
-```
-
-### **Option C — PBKDF2-SHA256**
-
-Stable, slightly older.
-
-```python
-pwd_context = CryptContext(schemes=["pbkdf2_sha256"])
-```
-
-### **Chosen for Kalamna:**
-
-➡️ **bcrypt** — already supported by passlib, great balance of security and performance.
 
 ---
 

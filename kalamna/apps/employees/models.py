@@ -80,7 +80,13 @@ class Employee(Base):
         default=False,
         nullable=False,
     )
-    # relationship
+
+    email_verified_at: Mapped[datetime | None] = mapped_column(
+    DateTime(timezone=True),
+    nullable=True,
+    )
+
+# relationship
     business = relationship(
         "Business", back_populates="employees"
     )  # MANY employees → ONE business
