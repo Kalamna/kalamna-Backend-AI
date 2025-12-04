@@ -65,15 +65,20 @@ def decode_token(token: str, audience: str = None) -> dict:
     except jwt.InvalidTokenError as err:
         raise Exception("Invalid token") from err
 
+
 # password hashing
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto") #setup password hashing schema with bcrypt
+pwd_context = CryptContext(
+    schemes=["bcrypt"], deprecated="auto"
+)  # setup password hashing schema with bcrypt
+
 
 def hash_password(password: str) -> str:
     """
     Hash a password using bcrypt.
     Returns the hashed password>> string output.
     """
-    return pwd_context.hash(password) #hash given password
+    return pwd_context.hash(password)  # hash given password
+
 
 def verify_password(plain: str, hashed: str) -> bool:
     """

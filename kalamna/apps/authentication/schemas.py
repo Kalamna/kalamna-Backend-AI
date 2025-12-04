@@ -1,4 +1,3 @@
-
 from typing import Literal
 from pydantic import BaseModel
 from kalamna.apps.business.schemas import BusinessCreateSchema
@@ -18,4 +17,4 @@ class RefreshTokenRequest(BaseModel):
 class RegisterSchema(BaseModel):
     business: BusinessCreateSchema
     owner: OwnerCreateSchema
-    #maybe will add model config for swagger
+    # maybe will add model config for swagger

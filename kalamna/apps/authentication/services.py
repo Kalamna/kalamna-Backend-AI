@@ -1,6 +1,7 @@
 """
 Auth logic for registering a new business and its owner employee
 """
+
 import asyncio
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -40,7 +41,7 @@ async def register_business_and_owner(data: RegisterSchema, db: AsyncSession):
         email=b.email,
         industry=b.industry,
         description=b.description,
-        domain_url=b.domain_url
+        domain_url=b.domain_url,
     )
     db.add(business)
     await db.flush()  # get business.id
@@ -49,7 +50,7 @@ async def register_business_and_owner(data: RegisterSchema, db: AsyncSession):
     try:
         validate_password(o.password)
     except ValidationError as e:
-        raise ValueError(str(e))
+        raise ValueError(str(e)) from e
 
     # Hash password
     hashed = await asyncio.to_thread(hash_password, o.password)
@@ -63,7 +64,7 @@ async def register_business_and_owner(data: RegisterSchema, db: AsyncSession):
         role=EmployeeRole.OWNER,
         is_verified=False,
         is_active=False,
-        email_verified_at=None
+        email_verified_at=None,
     )
     db.add(owner)
 

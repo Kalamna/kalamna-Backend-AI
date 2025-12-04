@@ -82,11 +82,11 @@ class Employee(Base):
     )
 
     email_verified_at: Mapped[datetime | None] = mapped_column(
-    DateTime(timezone=True),
-    nullable=True,
+        DateTime(timezone=True),
+        nullable=True,
     )
 
-# relationship
+    # relationship
     business = relationship(
         "Business", back_populates="employees"
     )  # MANY employees → ONE business

@@ -1,7 +1,9 @@
 import re
 
+
 class ValidationError(Exception):
     """Custom validation error for business logic."""
+
     pass
 
 
