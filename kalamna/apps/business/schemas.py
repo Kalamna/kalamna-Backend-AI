@@ -1,9 +1,10 @@
 from typing import Optional
 from uuid import UUID
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 from datetime import datetime
 
 class GetMeSchema(BaseModel):
+    id: UUID
     full_name: str
     email: str
     business_id: UUID
@@ -14,16 +15,20 @@ class GetMeSchema(BaseModel):
     created_at: datetime
     updated_at: datetime
 
-    # @field_validator("permission_flag", mode="before")
-    # def compute_permission_flag( cls, v, values ):
-    #     role = values["role", ""]
-    #     return "owner" if role == "owner" else "staff"
+    @field_validator("permission_flag")
+    def compute_permission_flag(cls, v, values):
+        role= values["role", ""]
+        return "owner" if role == "OWNER" else "staff"
 
     class Config:
         from_attributes = True
+        extra = "allow"
 
 class LoginSchema(BaseModel):
     email: str
     password: str
     class Config:
         from_attributes = True
+
+class RefreshTokenSchema(BaseModel):
+    token: str

@@ -3,13 +3,15 @@ Authentication API routes
 Endpoints: /login, /register, /refresh, /logout, /me
 """
 from datetime import datetime, timezone
+
+from asyncpg.pgproto.pgproto import timedelta
 from fastapi import APIRouter,Depends, HTTPException, status
 from .models import Business
 from kalamna.apps.employees.models import Employee
-from .schemas import LoginSchema, GetMeSchema
+from .schemas import LoginSchema, GetMeSchema, RefreshTokenSchema
 from .services import verify_password, permission_flag
 from ...core import db
-from kalamna.core.security import create_access_token, create_refresh_token
+from kalamna.core.security import create_access_token, create_refresh_token, ACCESS_TTL, decode_token
 from kalamna.core.db import get_db
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
@@ -28,11 +30,7 @@ async def get(db: AsyncSession = Depends(get_db)):
     employees = employees_records.scalars().all()
 
     # add permission flag dynamically
-    employees_out = []
-    for emp in employees:
-        emp_data = GetMeSchema.from_orm(emp)
-        emp_data.permission_flag = permission_flag(emp)
-        employees_out.append(emp_data)
+    employees_out = [GetMeSchema.from_orm(emp) for emp in employees]
     return employees_out
 
 
@@ -78,6 +76,29 @@ async def login(data: LoginSchema, db: AsyncSession = Depends(get_db)):
         "access": access_token,
         "refresh": refresh_token,
         "message": "login success",
-        "token expire time": "access : 15 minutes, refresh: 7 days"
+        "token expire time": "15 minutes"
     }
+
+@router.post("/refresh")
+async def refresh_token(data: RefreshTokenSchema, db: AsyncSession = Depends(get_db)):
+        payload = decode_token(data.token, audience="refresh")
+        employee_id = payload["sub"]
+        employee_record = await db.execute(select(Employee).where(Employee.id == employee_id))
+        employee = employee_record.scalars().first()
+        role = employee.role
+        access = create_access_token(
+            employee_id=str(employee.id),
+            role=str(employee.role)
+        )
+        refresh = create_refresh_token(employee_id=str(employee.id))
+        return {
+            "access token": access,
+            "refresh token": refresh,
+            "expire time": "15 minutes",
+        }
+
+
+# @router.delete("/logout")
+def logout(data: RefreshTokenSchema, db: AsyncSession = Depends(get_db)):
+    pass
 

@@ -8,7 +8,7 @@ def verify_password(plain_password, hashed_password) ->bool:
 
 # get permission flag for payload
 def permission_flag(employee):
-    if employee == 'OWNER':
-        return 'owner'
+    if employee.role == 'OWNER':
+        return "owner"
     else:
-        return 'staff'
+        return "staff"
