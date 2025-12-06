@@ -70,7 +70,11 @@ async def login(data: LoginSchema, db: AsyncSession = Depends(get_db)):
         "token expire time": now + ACCESS_TTL
     }
 
-@router.post("/refresh")
+@router.post(
+    "/refresh",
+    status_code=status.HTTP_200_OK,
+    summary="Refresh access token",
+)
 async def refresh_token(data: RefreshTokenRequest, db: AsyncSession = Depends(get_db)):
         payload = decode_token(data.token, audience="refresh")
         employee_id = payload["sub"]
