@@ -27,7 +27,7 @@ class GetMeSchema(BaseModel):
     email: str
     business_id: UUID
     role: str
-    permission_flag: str = "staff"
+    permission_flag: str = None
     is_active: bool
     is_verified: bool
     created_at: datetime

@@ -78,6 +78,12 @@ async def register_business_and_owner(data: RegisterSchema, db: AsyncSession):
 
     return business, owner
 
+def permission_flag(employee):
+    if str(employee.role) == "OWNER":
+        return "owner"
+    else:
+        return "staff"
+
 security = HTTPBearer()
 
 async def get_current_user(
