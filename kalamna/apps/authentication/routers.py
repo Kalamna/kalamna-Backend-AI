@@ -2,8 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from kalamna.core.db import get_db
 
-from kalamna.apps.authentication.schemas import RegisterSchema
-from kalamna.apps.authentication.services import register_business_and_owner
+from kalamna.apps.authentication.schemas import RegisterSchema, GetMeSchema
+from kalamna.apps.authentication.services import register_business_and_owner, get_current_user  
+from kalamna.apps.employees.models import Employee
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
@@ -33,3 +34,11 @@ async def register(
         "message": "Account created successfully. Please check your email to verify your account."
         # TODO: In the future, add a boolean to indicate if verification email was sent
     }
+
+@router.get("/me", response_model=GetMeSchema)
+async def get(current_employee: Employee = Depends(get_current_user)):
+    # add permission flag dynamically
+    emp_data = GetMeSchema.from_orm(current_employee)
+    emp_data.permission_flag = "owner" if current_employee.role == "OWNER" else "staff"
+
+    return emp_data

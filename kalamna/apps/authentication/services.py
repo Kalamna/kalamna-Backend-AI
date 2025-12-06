@@ -12,6 +12,11 @@ from kalamna.core.security import hash_password
 from kalamna.apps.authentication.schemas import RegisterSchema
 from kalamna.core.validation import validate_password, ValidationError
 
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi import Depends, HTTPException
+
+from kalamna.core.security import decode_token
+from kalamna.core.db import get_db
 
 async def register_business_and_owner(data: RegisterSchema, db: AsyncSession):
     """
@@ -72,3 +77,18 @@ async def register_business_and_owner(data: RegisterSchema, db: AsyncSession):
     await db.commit()
 
     return business, owner
+
+security = HTTPBearer()
+
+async def get_current_user(
+        credentials: HTTPAuthorizationCredentials = Depends(security),
+        db: AsyncSession = Depends(get_db)
+):
+    token = credentials.credentials
+    payload = decode_token(token, audience="access")
+    employee_id = payload['sub']
+    query = await db.execute(select(Employee).where(Employee.id==employee_id))
+    employee = query.scalar_one_or_none()
+    if employee is None:
+        raise HTTPException(status_code=404, detail="Employee not found")
+    return employee
