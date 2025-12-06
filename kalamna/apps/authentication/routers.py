@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
 from kalamna.core.db import get_db
 
 from kalamna.apps.authentication.schemas import RegisterSchema, GetMeSchema, LoginSchema
@@ -76,7 +77,7 @@ async def login(data: LoginSchema, db: AsyncSession = Depends(get_db)):
     summary="Refresh access token",
 )
 async def refresh_token(data: RefreshTokenRequest, db: AsyncSession = Depends(get_db)):
-        payload = decode_token(data.token, audience="refresh")
+        payload = decode_token(data.refresh_token, audience="refresh")
         employee_id = payload["sub"]
         employee_record = await db.execute(select(Employee).where(Employee.id == employee_id))
         employee = employee_record.scalars().first()
