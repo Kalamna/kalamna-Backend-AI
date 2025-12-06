@@ -9,11 +9,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from kalamna.apps.business.models import Business
 from kalamna.apps.employees.models import Employee, EmployeeRole
 from kalamna.core.security import hash_password
-from kalamna.apps.authentication.schemas import RegisterSchema
+from kalamna.apps.authentication.schemas import RegisterSchema, LoginSchema, RefreshTokenRequest
 from kalamna.core.validation import validate_password, ValidationError
 
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from fastapi import Depends, HTTPException
+from fastapi import Depends, HTTPException, status
 
 from kalamna.core.security import decode_token
 from kalamna.core.db import get_db
@@ -92,3 +92,38 @@ async def get_current_user(
     if employee is None:
         raise HTTPException(status_code=404, detail="Employee not found")
     return employee
+
+
+async def login_validation(data: LoginSchema, db: AsyncSession = Depends(get_db)):
+    """
+    Validate login credentials and return employee object
+    """
+    # fetch the employee from database:
+    employees_records = await db.execute( select(Employee).where(Employee.email == data.email) )
+    employee = employees_records.scalars().first()
+    # validate email
+    if employee == None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail='invalid email or password'
+        )
+    # validate password
+    if data.password!=employee.password:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail='invalid email or password'
+        )
+    # Check employee + business verification
+    if not employee.is_verified:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail='your email is not verified please check your inbox'
+        )
+    if not employee.is_active:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail='your email is not verified please check your inbox'
+        )
+    business_record = await db.execute(select(Business).where(Business.id == employee.business_id))
+    business = business_record.scalars().first()
+    return employee, business

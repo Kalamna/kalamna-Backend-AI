@@ -2,9 +2,13 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from kalamna.core.db import get_db
 
-from kalamna.apps.authentication.schemas import RegisterSchema, GetMeSchema
-from kalamna.apps.authentication.services import register_business_and_owner, get_current_user  
+from kalamna.apps.authentication.schemas import RegisterSchema, GetMeSchema, LoginSchema
+from kalamna.apps.authentication.services import register_business_and_owner, get_current_user, RefreshTokenRequest, login_validation
 from kalamna.apps.employees.models import Employee
+
+from kalamna.core.security import create_access_token, create_refresh_token, decode_token
+from kalamna.core.security import ACCESS_TTL
+from datetime import datetime, timezone
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
@@ -42,3 +46,45 @@ async def get(current_employee: Employee = Depends(get_current_user)):
     emp_data.permission_flag = "owner" if current_employee.role == "OWNER" else "staff"
 
     return emp_data
+
+
+@router.post(
+    "/login",
+    status_code=status.HTTP_200_OK,
+    summary="Login to get access and refresh tokens",
+)
+async def login(data: LoginSchema, db: AsyncSession = Depends(get_db)):
+    employee, business = await login_validation(data, db)
+    
+    # Generate tokens using existing JWT builder
+    access_token = create_access_token(
+        employee_id=str(employee.id),
+        role=str(employee.role)
+    )
+    refresh_token = create_refresh_token(employee_id=str(employee.id))
+    now = datetime.now(timezone.utc)
+    return {
+        "access": access_token,
+        "refresh": refresh_token,
+        "message": "login success",
+        "token expire time": now + ACCESS_TTL
+    }
+
+@router.post("/refresh")
+async def refresh_token(data: RefreshTokenRequest, db: AsyncSession = Depends(get_db)):
+        payload = decode_token(data.token, audience="refresh")
+        employee_id = payload["sub"]
+        employee_record = await db.execute(select(Employee).where(Employee.id == employee_id))
+        employee = employee_record.scalars().first()
+        role = employee.role
+        access = create_access_token(
+            employee_id=str(employee.id),
+            role=str(employee.role)
+        )
+        refresh = create_refresh_token(employee_id=str(employee.id))
+        now = datetime.now(timezone.utc)
+        return {
+            "access token": access,
+            "refresh token": refresh,
+            "expire time": now + ACCESS_TTL,
+        }

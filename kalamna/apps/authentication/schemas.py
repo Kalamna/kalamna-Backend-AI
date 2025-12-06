@@ -36,3 +36,11 @@ class GetMeSchema(BaseModel):
     class Config:
         from_attributes = True
         extra = "allow"
+
+class LoginSchema(BaseModel):
+    email: str
+    password: str
+    class Config:
+        from_attributes = True
+
+
