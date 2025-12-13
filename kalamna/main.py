@@ -1,7 +1,10 @@
-from fastapi import FastAPI
+from fastapi import FastAPI , Depends
 from kalamna.core.config import setup_logging
 from kalamna.apps.authentication.routers import router as auth_router
 import logging
+from redis.asyncio import Redis
+from kalamna.core.redis import get_redis
+
 
 setup_logging()
 
@@ -23,3 +26,8 @@ app.include_router(auth_router, prefix="/api/v1")
 @app.get("/")
 def hello():
     return {"message": "Hello, World!"}
+
+@app.get("/redis/check")
+async def redis_check(redis=Depends(get_redis)):
+    await redis.set("ping", "pong", ex=5)
+    return await redis.get("ping")
