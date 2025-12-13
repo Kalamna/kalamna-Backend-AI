@@ -62,7 +62,7 @@ The solution is designed for large-scale usage and can support hundreds of thous
 
 ```
 
-rag_saas/
+kalamna-backend-ai/
 ├── app/
 │   ├── main.py
 │   │
@@ -77,7 +77,8 @@ rag_saas/
 │   │   ├── base.py
 │   │   └── migrations/
 │   │
-│   ├── apps/
+│   ├── kalamna/
+|   |__|apps/
 │   │   ├── auth/
 │   │   ├── organizations/
 │   │   ├── employees/

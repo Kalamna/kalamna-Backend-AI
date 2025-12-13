@@ -67,7 +67,6 @@ class Business(Base):
 
     domain_url: Mapped[str | None] = mapped_column(
         String(255),
-        unique=True,
         nullable=True,
     )
 

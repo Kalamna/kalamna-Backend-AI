@@ -1,6 +1,6 @@
 """
 Employee database models
-Employee model with name, role, email , password, and business_id , is_active, created_at, updated_at
+Employee model with name, role, email , password, and business_id ,is_verifed, is_active, created_at, updated_at
 """
 
 from kalamna.db.base import Base
@@ -64,8 +64,8 @@ class Employee(Base):
         onupdate=lambda: datetime.now(timezone.utc),
         nullable=False,
     )
+    # TODO:
     """
-    TODO:
     Integrate the invitation system into the Employee model.
 
     - Add `invitation_id` as a foreign key to link each employee to the
@@ -80,6 +80,12 @@ class Employee(Base):
         default=False,
         nullable=False,
     )
+
+    email_verified_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True),
+        nullable=True,
+    )
+
     # relationship
     business = relationship(
         "Business", back_populates="employees"

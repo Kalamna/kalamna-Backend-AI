@@ -3,6 +3,7 @@ from datetime import datetime, timedelta, timezone
 from uuid import uuid4
 import jwt
 from dotenv import load_dotenv
+from passlib.context import CryptContext
 
 load_dotenv()
 
@@ -63,3 +64,25 @@ def decode_token(token: str, audience: str = None) -> dict:
         raise Exception("Token has expired") from err
     except jwt.InvalidTokenError as err:
         raise Exception("Invalid token") from err
+
+
+# password hashing
+pwd_context = CryptContext(
+    schemes=["argon2", "bcrypt"], default="argon2", deprecated="auto"
+)
+
+
+def hash_password(password: str) -> str:
+    """
+    Hash a password using bcrypt.
+    Returns the hashed password>> string output.
+    """
+    return pwd_context.hash(password)  # hash given password
+
+
+def verify_password(plain: str, hashed: str) -> bool:
+    """
+    Verify a plain password against a stored bcrypt hash.
+    Use this during login. >> boolen output
+    """
+    return pwd_context.verify(plain, hashed)

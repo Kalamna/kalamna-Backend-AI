@@ -1,12 +1,11 @@
 from fastapi import FastAPI
 from kalamna.core.config import setup_logging
+from kalamna.apps.authentication.routers import router as auth_router
 import logging
-
 
 setup_logging()
 
 logger = logging.getLogger("kalamna")
-
 
 app = FastAPI(
     title="Kalamna Backend API",
@@ -16,6 +15,9 @@ app = FastAPI(
     redoc_url="/redoc",
     openapi_url="/openapi.json",
 )
+
+# Apply global prefix for all auth routes
+app.include_router(auth_router, prefix="/api/v1")
 
 
 @app.get("/")
