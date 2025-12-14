@@ -1,9 +1,11 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
+from pydantic import EmailStr
 from kalamna.core.db import get_db
 
 from kalamna.apps.authentication.schemas import RegisterSchema
 from kalamna.apps.authentication.services import register_business_and_owner
+from kalamna.utils.mailer import send_email
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
@@ -33,3 +35,22 @@ async def register(
         "message": "Account created successfully. Please check your email to verify your account."
         # TODO: In the future, add a boolean to indicate if verification email was sent
     }
+
+
+@router.post("/test-email")
+async def test_email(
+    background_tasks: BackgroundTasks,
+    email_to: EmailStr,
+):
+    """
+    Test email sending functionality.
+    """
+    await send_email(
+        background_tasks=background_tasks,
+        subject="Test Email from Kalamna",
+        email_to=[email_to],
+        template_name="mail.html",
+        context={"name": "Test User"},
+    )
+    return {"message": "Test email sent in the background."}
+
