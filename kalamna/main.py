@@ -2,7 +2,6 @@ from fastapi import FastAPI , Depends
 from kalamna.core.config import setup_logging
 from kalamna.apps.authentication.routers import router as auth_router
 import logging
-from redis.asyncio import Redis
 from kalamna.core.redis import get_redis
 
 
