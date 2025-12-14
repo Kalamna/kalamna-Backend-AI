@@ -12,12 +12,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Build the image using your Dockerfile + requirements.txt
       - name: Build api image
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          JWT_ALGORITHM: ${{ secrets.JWT_ALGORITHM }}
+          REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
         run: docker compose build api
 
-      # Run Ruff *inside* the api container
       - name: Run Ruff
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          JWT_ALGORITHM: ${{ secrets.JWT_ALGORITHM }}
+          REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
         run: docker compose run --rm api ruff check .
-
-     

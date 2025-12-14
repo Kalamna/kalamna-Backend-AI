@@ -15,8 +15,8 @@ services:
     container_name: kalamna-api
     ports:
       - "8000:8000"
-    env_file:
-      - .env
+    #env_file:
+      #- .env
     environment:
       DATABASE_URL: ${DATABASE_URL}
       JWT_SECRET: ${JWT_SECRET}
