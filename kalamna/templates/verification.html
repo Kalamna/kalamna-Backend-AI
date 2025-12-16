@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head><meta charset="UTF-8"><title>تأكيد البريد الإلكتروني</title></head>
+<body style="margin:0;padding:0;background-color:#F5F7FA;font-family:'IBM Plex Sans Arabic','IBM Plex Sans',Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#F5F7FA;padding:20px;">
+    <tr><td align="center">
+      <table width="600" cellpadding="0" cellspacing="0" style="background-color:#FFFFFF;border-radius:8px;border:1px solid #E5E7EB;">
+        <tr>
+          <td align="center" style="padding:30px;border-bottom:1px solid #E5E7EB;">
+            <img src="https://i.postimg.cc/fMvmGtY6/Group-19.png" alt="Kalamna Logo" width="160" style="display:block;border:0;outline:none;">
+          </td>
+        </tr>
+
+        <tr>
+          <td style="padding:40px;color:#00131D;">
+            <h1 style="margin:0 0 12px 0;font-size:24px;font-weight:700;text-align:center;">تأكيد البريد الإلكتروني</h1>
+
+            <p style="margin:0 0 20px 0;font-size:15px;line-height:1.9;color:#005398;text-align:center;">
+              أهلاً {{first_name}}، خطوة أخيرة عشان نفعّل حسابك على كلامنا.
+            </p>
+
+            <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#FAFAFA;border-radius:6px;padding:18px;border:1px solid #EEF2F7;">
+              <tr>
+                <td style="font-size:14.5px;line-height:1.8;color:#00131D;">
+                  اضغط على زر “تأكيد البريد” لتفعيل حسابك. لو ما طلبتش إنشاء حساب، تجاهل الرسالة دي.
+                </td>
+              </tr>
+            </table>
+
+            <table width="100%" cellpadding="0" cellspacing="0" style="margin-top:26px;">
+              <tr><td align="center">
+                <a href="{{verify_url}}"
+                   style="display:inline-block;padding:14px 36px;background-color:#9ACEFF;color:#00131D;font-size:16px;font-weight:700;text-decoration:none;border-radius:6px;">
+                  تأكيد البريد
+                </a>
+              </td></tr>
+            </table>
+
+            <p style="margin:18px 0 0 0;font-size:12.5px;color:#6B7280;line-height:1.7;text-align:center;">
+              الرابط صالح لمدة {{expires_in}}. لو الزر مش شغال انسخ الرابط ده:<br>
+              <span style="direction:ltr;unicode-bidi:bidi-override;color:#111827;">{{verify_url}}</span>
+            </p>
+          </td>
+        </tr>
+
+        <tr>
+          <td align="center" style="padding:25px;border-top:1px solid #E5E7EB;font-size:13px;color:#005398;line-height:1.8;">
+            للدعم الفني والاستفسارات<br>
+            <a href="mailto:support@kalamna.ai" style="color:#005398;text-decoration:none;font-weight:600;">support@kalamna.ai</a>
+          </td>
+        </tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>

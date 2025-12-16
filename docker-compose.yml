@@ -1,4 +1,13 @@
 services:
+  cache:
+    image: redis:7.4-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--requirepass", "${REDIS_PASSWORD}"]
+    volumes:
+      - cache:/data
+
   api:
     build:
       context: .
@@ -6,24 +15,17 @@ services:
     container_name: kalamna-api
     ports:
       - "8000:8000"
+    #env_file:
+      #- .env
     environment:
-      
-      DATABASE_URL: "${DATABASE_URL}"
-
-      # JWT config
-      #JWT_SECRET: "${JWT_SECRET}"
-      #JWT_ALGORITHM: "${JWT_ALGORITHM:-HS256}"
-
-      # Optional other envs
-      # APP_ENV: "production"
-
-    # Uncomment this during development only:
-    # volumes:
-    #   - .:/kalamna
-    #   - /kalamna/__pycache__
-    #   - /kalamna/kalamna/__pycache__
-    
-    # Restart policy for production environments
+      DATABASE_URL: ${DATABASE_URL}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_ALGORITHM: ${JWT_ALGORITHM:-HS256}
+      REDIS_URL: redis://:${REDIS_PASSWORD}@cache:6379
     restart: unless-stopped
+    depends_on:
+      - cache
 
-
+volumes:
+  cache:
+    driver: local

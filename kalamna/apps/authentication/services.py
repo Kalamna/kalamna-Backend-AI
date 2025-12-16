@@ -3,14 +3,17 @@ Auth logic for registering a new business and its owner employee
 """
 
 import asyncio
+
+from fastapi import BackgroundTasks
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from kalamna.apps.authentication.schemas import RegisterSchema
 from kalamna.apps.business.models import Business
 from kalamna.apps.employees.models import Employee, EmployeeRole
 from kalamna.core.security import hash_password
-from kalamna.apps.authentication.schemas import RegisterSchema
-from kalamna.core.validation import validate_password, ValidationError
+from kalamna.core.validation import ValidationError, validate_password
+from kalamna.utils.mailer import send_email
 
 
 async def register_business_and_owner(data: RegisterSchema, db: AsyncSession):
@@ -72,3 +75,16 @@ async def register_business_and_owner(data: RegisterSchema, db: AsyncSession):
     await db.commit()
 
     return business, owner
+
+
+async  def test_email(background_tasks: BackgroundTasks, email_to: list[str]):
+    if not email_to:
+        raise ValueError("Recipient email address(es) must be provided")
+    await send_email(
+        background_tasks=background_tasks,
+        subject="Test Email from Kalamna",
+        email_to=email_to,
+        template_name="mail.html",
+        context={}
+    )
+    return {"message": "Email queued for sending"}

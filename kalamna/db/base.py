@@ -1,7 +1,7 @@
 # kalamna/db/base.py
 
-from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy import MetaData
+from sqlalchemy.orm import DeclarativeBase
 
 # ✅ Real MetaData OBJECT, not a function
 naming_convention = {

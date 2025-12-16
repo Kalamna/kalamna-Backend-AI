@@ -3,13 +3,17 @@ Employee database models
 Employee model with name, role, email , password, and business_id ,is_verifed, is_active, created_at, updated_at
 """
 
-from kalamna.db.base import Base
+import uuid
 from datetime import datetime, timezone
 from enum import Enum
-from sqlalchemy import String, Boolean, DateTime, ForeignKey, Enum as SAEnum
+
+from sqlalchemy import Boolean, DateTime
+from sqlalchemy import Enum as SAEnum
+from sqlalchemy import ForeignKey, String
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-import uuid
+
+from kalamna.db.base import Base
 
 
 class EmployeeRole(Enum):
