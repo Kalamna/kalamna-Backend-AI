@@ -8,22 +8,23 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      JWT_ALGORITHM: ${{ secrets.JWT_ALGORITHM }}
+      REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Build api image
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          JWT_ALGORITHM: ${{ secrets.JWT_ALGORITHM }}
-          REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
         run: docker compose build api
 
       - name: Run Ruff
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          JWT_ALGORITHM: ${{ secrets.JWT_ALGORITHM }}
-          REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
         run: docker compose run --rm api ruff check .
+
+      - name: Run isort
+        run: docker compose run --rm api isort .
+      
+
