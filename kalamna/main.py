@@ -1,9 +1,10 @@
-from fastapi import FastAPI , Depends
-from kalamna.core.config import setup_logging
-from kalamna.apps.authentication.routers import router as auth_router
 import logging
-from kalamna.core.redis import get_redis
 
+from fastapi import Depends, FastAPI
+
+from kalamna.apps.authentication.routers import router as auth_router
+from kalamna.core.config import setup_logging
+from kalamna.core.redis import get_redis
 
 setup_logging()
 

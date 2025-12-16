@@ -1,5 +1,7 @@
 from typing import Literal
+
 from pydantic import BaseModel
+
 from kalamna.apps.business.schemas import BusinessCreateSchema
 from kalamna.apps.employees.schemas import OwnerCreateSchema
 

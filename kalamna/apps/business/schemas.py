@@ -1,5 +1,7 @@
-from pydantic import BaseModel, EmailStr, Field, HttpUrl
 from typing import Optional
+
+from pydantic import BaseModel, EmailStr, Field, HttpUrl
+
 from kalamna.apps.business.models import IndustryEnum
 
 

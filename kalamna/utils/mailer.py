@@ -1,11 +1,12 @@
-from fastapi import BackgroundTasks
-from fastapi_mail import FastMail, MessageSchema, ConnectionConfig, MessageType
-from pydantic import EmailStr
-from typing import List
 import os
 from pathlib import Path
+from typing import List
+
 from dotenv import load_dotenv
+from fastapi import BackgroundTasks
+from fastapi_mail import ConnectionConfig, FastMail, MessageSchema, MessageType
 from jinja2 import Environment, FileSystemLoader, select_autoescape
+from pydantic import EmailStr
 
 load_dotenv()
 

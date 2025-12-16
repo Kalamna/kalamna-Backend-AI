@@ -1,10 +1,10 @@
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, status
-from sqlalchemy.ext.asyncio import AsyncSession
 from pydantic import EmailStr
-from kalamna.core.db import get_db
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from kalamna.apps.authentication.schemas import RegisterSchema
 from kalamna.apps.authentication.services import register_business_and_owner
+from kalamna.core.db import get_db
 from kalamna.utils.mailer import send_email
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
