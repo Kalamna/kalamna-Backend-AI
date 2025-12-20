@@ -85,7 +85,7 @@ async def register_business_and_owner(data: RegisterSchema, db: AsyncSession):
     return business, owner
 
 
-async  def test_email(background_tasks: BackgroundTasks, email_to: list[str]):
+async def test_email(background_tasks: BackgroundTasks, email_to: list[str]):
     if not email_to:
         raise ValueError("Recipient email address(es) must be provided")
     await send_email(
@@ -93,6 +93,6 @@ async  def test_email(background_tasks: BackgroundTasks, email_to: list[str]):
         subject="Test Email from Kalamna",
         email_to=email_to,
         template_name="mail.html",
-        context={}
+        context={},
     )
     return {"message": "Email queued for sending"}

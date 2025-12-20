@@ -27,6 +27,7 @@ app.include_router(auth_router, prefix="/api/v1")
 def hello():
     return {"message": "Hello, World!"}
 
+
 @app.get("/redis/check")
 async def redis_check(redis=Depends(get_redis)):
     await redis.set("ping", "pong", ex=5)

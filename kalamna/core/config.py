@@ -26,7 +26,17 @@ def setup_logging():
             "loggers": {
                 "uvicorn": {
                     "handlers": ["console"],
-                    "level": "INFO",
+                    "level": "WARNING",  # silence uvicorn.info chatter
+                },
+                "uvicorn.error": {
+                    "handlers": ["console"],
+                    "level": "WARNING",  # reduce startup noise
+                    "propagate": False,
+                },
+                "uvicorn.access": {
+                    "handlers": ["console"],
+                    "level": "WARNING",  # hide access logs unless elevated
+                    "propagate": False,
                 },
                 "kalamna": {
                     "handlers": ["console", "file"],

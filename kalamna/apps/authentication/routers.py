@@ -53,4 +53,3 @@ async def test_email(
         context={"name": "Test User"},
     )
     return {"message": "Test email sent in the background."}
-

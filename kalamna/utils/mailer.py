@@ -14,11 +14,9 @@ load_dotenv()
 templates_dir = Path(__file__).parent.parent / "templates"
 
 
-
-
 env = Environment(
     loader=FileSystemLoader(searchpath=str(templates_dir)),
-    autoescape=select_autoescape(['html', 'xml'])
+    autoescape=select_autoescape(["html", "xml"]),
 )
 
 conf = ConnectionConfig(
@@ -31,10 +29,17 @@ conf = ConnectionConfig(
     MAIL_STARTTLS=os.getenv("EMAIL_USE_TLS", "FALSE").upper() == "TRUE",
     MAIL_SSL_TLS=os.getenv("EMAIL_USE_SSL", "FALSE").upper() == "TRUE",
     USE_CREDENTIALS=True,
-    VALIDATE_CERTS=True
+    VALIDATE_CERTS=True,
 )
 
-async def send_email(background_tasks: BackgroundTasks, subject: str, email_to: List[EmailStr], template_name: str, context: dict):
+
+async def send_email(
+    background_tasks: BackgroundTasks,
+    subject: str,
+    email_to: List[EmailStr],
+    template_name: str,
+    context: dict,
+):
     """
     Send an email using FastMail with a Jinja2 template.
 
@@ -51,11 +56,8 @@ async def send_email(background_tasks: BackgroundTasks, subject: str, email_to: 
         subject=subject,
         recipients=email_to,
         body=html_content,
-        subtype=MessageType.html
+        subtype=MessageType.html,
     )
 
     fm = FastMail(conf)
     background_tasks.add_task(fm.send_message, message)
-
-
-
