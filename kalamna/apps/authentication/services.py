@@ -31,6 +31,14 @@ async def register_business_and_owner(data: RegisterSchema, db: AsyncSession):
     if existing_business:
         raise ValueError("Business email already exists")
 
+    # Check domain URL
+    if b.domain_url:
+        existing_domain = await db.scalar(
+            select(Business).where(Business.domain_url == str(b.domain_url))
+        )
+        if existing_domain:
+            raise ValueError("Business domain already exists")
+
     # Check employee email
     existing_employee = await db.scalar(
         select(Employee).where(Employee.email == o.email)
