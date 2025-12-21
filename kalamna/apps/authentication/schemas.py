@@ -31,3 +31,10 @@ class LoginResponseSchema(BaseModel):
     token_type: str
     expires_in: int
     role: str
+
+class MeResponseSchema(BaseModel):
+    id: str
+    email: str
+    full_name: str
+    role: str
+    business: str

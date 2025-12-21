@@ -13,8 +13,12 @@ from kalamna.apps.authentication.schemas import (
     LoginSchema,
     LoginResponseSchema,
     RegisterSchema,
+    MeResponseSchema,
 )
-
+from kalamna.apps.authentication.dependencies import (
+    get_current_employee,
+    )
+from kalamna.apps.employees.models import Employee
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
@@ -95,3 +99,22 @@ async def login_employee(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail=str(e),
         ) from e
+
+
+# get current authenticated employee info
+@router.get(
+    "/me",
+    response_model=MeResponseSchema,
+    status_code=status.HTTP_200_OK,
+    summary="Get current authenticated employee info",
+)
+async def get_me(
+    current_employee: Employee = Depends(get_current_employee),
+):
+    return {
+        "id": str(current_employee.id),
+        "email": current_employee.email,
+        "full_name": current_employee.full_name,
+        "role": current_employee.role.value,
+        "business": current_employee.business.name,
+    }
