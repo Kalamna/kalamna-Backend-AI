@@ -5,9 +5,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from kalamna.apps.authentication.dependencies import get_current_employee
 from kalamna.apps.authentication.schemas import (LoginResponseSchema,
                                                  LoginSchema, MeResponseSchema,
-                                                 RegisterSchema)
+                                                 RegisterSchema,     RefreshTokenRequest,
+    RefreshResponseSchema)
 from kalamna.apps.authentication.services import (login,
-                                                  register_business_and_owner)
+                                                  register_business_and_owner,refresh_access_token)
 from kalamna.apps.employees.models import Employee
 from kalamna.core.db import get_db
 from kalamna.utils.mailer import send_email
@@ -110,3 +111,24 @@ async def get_me(
         "role": current_employee.role.value,
         "business": current_employee.business.name,
     }
+
+@router.post(
+    "/refresh",
+    response_model=RefreshResponseSchema,
+    status_code=status.HTTP_200_OK,
+    summary="Refresh access token",
+)
+async def refresh_token_endpoint(
+    data: RefreshTokenRequest,
+    db: AsyncSession = Depends(get_db),
+):
+    try:
+        return await refresh_access_token(
+            refresh_token=data.refresh_token,
+            db=db,
+        )
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=str(e),
+        ) from e

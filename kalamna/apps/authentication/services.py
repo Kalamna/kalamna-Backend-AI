@@ -160,3 +160,58 @@ async def login(
         "expires_in": 900,
         "role": employee.role.value,
     }
+
+
+async def refresh_access_token(
+    *,
+    refresh_token: str,
+    db: AsyncSession,
+):
+    """
+    Validate refresh token and issue a new access token.
+    """
+
+    # Decode refresh JWT
+    try:
+        payload = decode_token(refresh_token, audience="refresh")
+    except Exception:
+        raise ValueError("Invalid or expired refresh token")
+
+    jti = payload.get("jti")
+    employee_id = payload.get("sub")
+
+    if not jti or not employee_id:
+        raise ValueError("Invalid or expired refresh token")
+
+    # Lookup refresh token in DB
+    token_row = await db.scalar(
+        select(RefreshToken).where(RefreshToken.jti == jti)
+    )
+
+    if not token_row:
+        raise ValueError("Invalid or expired refresh token")
+
+    # Check if revoked / expired
+    now = datetime.now(timezone.utc)
+
+    if token_row.revoked_at is not None:
+        raise ValueError("Invalid or expired refresh token")
+
+    if token_row.expires_at < now:
+        raise ValueError("Invalid or expired refresh token")
+
+    # Fetch employee and issue new access token
+    employee = await db.get(Employee, employee_id)
+    if not employee:
+        raise ValueError("Invalid or expired refresh token")
+
+    access_token = create_access_token(
+        employee_id=str(employee.id),
+        role=employee.role.value,
+    )
+
+    return {
+        "access_token": access_token,
+        "expires_in": 900,
+        "token_type": "bearer",
+    }
