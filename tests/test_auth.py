@@ -2,6 +2,7 @@
 Authentication tests
 Test user registration, login, JWT tokens, and permissions
 """
+
 import os
 from uuid import uuid4
 
@@ -12,12 +13,8 @@ import pytest
 os.environ.setdefault("JWT_SECRET", "test-secret-key")
 
 from kalamna.core.security import (  # adjust import path if needed
-    create_access_token,
-    create_refresh_token,
-    decode_token,
-    hash_password,
-    verify_password,
-)
+    create_access_token, create_refresh_token, decode_token, hash_password,
+    verify_password)
 
 
 @pytest.fixture

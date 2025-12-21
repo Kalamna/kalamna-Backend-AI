@@ -5,6 +5,7 @@ Human-readable structured logging setup for the application.
 
 import logging
 import sys
+
 import structlog
 
 
@@ -24,7 +25,7 @@ def setup_logging() -> None:
             structlog.processors.TimeStamper(fmt="%H:%M:%S"),
             structlog.dev.ConsoleRenderer(
                 colors=True,
-                pad_event=32,     # aligns log messages nicely
+                pad_event=32,  # aligns log messages nicely
                 sort_keys=False,  # preserves logical order
             ),
         ],

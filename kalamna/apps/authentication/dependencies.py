@@ -8,7 +8,6 @@ from kalamna.apps.employees.models import Employee
 from kalamna.core.db import get_db
 from kalamna.core.security import decode_token
 
-
 # bearer-only scheme
 bearer_scheme = HTTPBearer()
 
@@ -20,11 +19,11 @@ async def get_current_employee(
     token = credentials.credentials
     try:
         payload = decode_token(token, audience="access")
-    except Exception:
+    except Exception as err:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid or expired token",
-        )
+        ) from err
 
     employee_id = payload.get("sub")
 

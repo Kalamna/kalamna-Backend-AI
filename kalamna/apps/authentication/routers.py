@@ -2,23 +2,15 @@ from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, status
 from pydantic import EmailStr
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from kalamna.apps.authentication.services import(
-    register_business_and_owner, 
-    login,
-)
+from kalamna.apps.authentication.dependencies import get_current_employee
+from kalamna.apps.authentication.schemas import (LoginResponseSchema,
+                                                 LoginSchema, MeResponseSchema,
+                                                 RegisterSchema)
+from kalamna.apps.authentication.services import (login,
+                                                  register_business_and_owner)
+from kalamna.apps.employees.models import Employee
 from kalamna.core.db import get_db
 from kalamna.utils.mailer import send_email
-
-from kalamna.apps.authentication.schemas import (
-    LoginSchema,
-    LoginResponseSchema,
-    RegisterSchema,
-    MeResponseSchema,
-)
-from kalamna.apps.authentication.dependencies import (
-    get_current_employee,
-    )
-from kalamna.apps.employees.models import Employee
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
