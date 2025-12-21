@@ -5,8 +5,8 @@ from pydantic import BaseModel, EmailStr
 from kalamna.apps.business.schemas import BusinessCreateSchema
 from kalamna.apps.employees.schemas import OwnerCreateSchema
 
-
 # Base / Shared Schemas
+
 
 class BaseTokenResponse(BaseModel):
     access_token: str
@@ -20,6 +20,7 @@ class RefreshTokenRequest(BaseModel):
     Used by /auth/refresh
     MUST keep this name (already used elsewhere)
     """
+
     refresh_token: str
 
 
@@ -32,6 +33,7 @@ class LoginResponseSchema(BaseTokenResponse):
     """
     Login returns BOTH tokens
     """
+
     refresh_token: str
     role: str
 
@@ -40,7 +42,9 @@ class RefreshResponseSchema(BaseTokenResponse):
     """
     Refresh returns ONLY new access token
     """
+
     pass
+
 
 class RegisterSchema(BaseModel):
     business: BusinessCreateSchema
@@ -48,6 +52,7 @@ class RegisterSchema(BaseModel):
 
 
 # employee Info Schema
+
 
 class MeResponseSchema(BaseModel):
     id: str

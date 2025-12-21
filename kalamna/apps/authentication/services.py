@@ -13,13 +13,18 @@ from kalamna.apps.authentication.models import RefreshToken
 from kalamna.apps.authentication.schemas import RegisterSchema
 from kalamna.apps.business.models import Business
 from kalamna.apps.employees.models import Employee, EmployeeRole
-from kalamna.core.security import (create_access_token, create_refresh_token,
-                                   decode_token, hash_password,
-                                   verify_password)
+from kalamna.core.security import (
+    create_access_token,
+    create_refresh_token,
+    decode_token,
+    hash_password,
+    verify_password,
+)
 from kalamna.core.validation import ValidationError, validate_password
 from kalamna.utils.mailer import send_email
 
 
+# register service
 async def register_business_and_owner(data: RegisterSchema, db: AsyncSession):
     """
     Register a new business and its owner employee in one endpoint.
@@ -89,6 +94,7 @@ async def register_business_and_owner(data: RegisterSchema, db: AsyncSession):
     return business, owner
 
 
+# send test email service
 async def test_email(background_tasks: BackgroundTasks, email_to: list[str]):
     if not email_to:
         raise ValueError("Recipient email address(es) must be provided")
@@ -102,6 +108,7 @@ async def test_email(background_tasks: BackgroundTasks, email_to: list[str]):
     return {"message": "Email queued for sending"}
 
 
+# login service
 async def login(
     *,
     email: str,
@@ -162,6 +169,7 @@ async def login(
     }
 
 
+# refresh access token service
 async def refresh_access_token(
     *,
     refresh_token: str,
@@ -174,8 +182,8 @@ async def refresh_access_token(
     # Decode refresh JWT
     try:
         payload = decode_token(refresh_token, audience="refresh")
-    except Exception:
-        raise ValueError("Invalid or expired refresh token")
+    except Exception as err:
+        raise ValueError("Invalid or expired refresh token") from err
 
     jti = payload.get("jti")
     employee_id = payload.get("sub")
@@ -184,9 +192,7 @@ async def refresh_access_token(
         raise ValueError("Invalid or expired refresh token")
 
     # Lookup refresh token in DB
-    token_row = await db.scalar(
-        select(RefreshToken).where(RefreshToken.jti == jti)
-    )
+    token_row = await db.scalar(select(RefreshToken).where(RefreshToken.jti == jti))
 
     if not token_row:
         raise ValueError("Invalid or expired refresh token")
@@ -215,3 +221,39 @@ async def refresh_access_token(
         "expires_in": 900,
         "token_type": "bearer",
     }
+
+
+# logout service
+async def logout(
+    *,
+    refresh_token: str,
+    db: AsyncSession,
+):
+    """
+    Revoke a refresh token (logout).
+    """
+
+    # Decode refresh token
+    try:
+        payload = decode_token(refresh_token, audience="refresh")
+    except Exception as err:
+        raise ValueError("Invalid or expired refresh token") from err
+
+    jti = payload.get("jti")
+    if not jti:
+        raise ValueError("Invalid or expired refresh token")
+
+    # check for refresh token in DB
+    token_row = await db.scalar(select(RefreshToken).where(RefreshToken.jti == jti))
+
+    if not token_row:
+        raise ValueError("Invalid or expired refresh token")
+
+    # check If already revoked ,  treat as invalid else revoke it
+    if token_row.revoked_at is not None:
+        raise ValueError("Invalid or expired refresh token")
+
+    token_row.revoked_at = datetime.now(timezone.utc)
+    await db.commit()
+
+    return {"message": "Logged out successfully"}
