@@ -11,6 +11,7 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from kalamna.apps.business.models import Business
 from kalamna.apps.employees.models import Employee
+from kalamna.apps.authentication.models import RefreshToken
 from kalamna.db.base import Base
 
 # Load environment variables
