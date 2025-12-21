@@ -2,10 +2,19 @@ from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, status
 from pydantic import EmailStr
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from kalamna.apps.authentication.schemas import RegisterSchema
-from kalamna.apps.authentication.services import register_business_and_owner
+from kalamna.apps.authentication.services import(
+    register_business_and_owner, 
+    login,
+)
 from kalamna.core.db import get_db
 from kalamna.utils.mailer import send_email
+
+from kalamna.apps.authentication.schemas import (
+    LoginSchema,
+    LoginResponseSchema,
+    RegisterSchema,
+)
+
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
@@ -53,3 +62,36 @@ async def test_email(
         context={"name": "Test User"},
     )
     return {"message": "Test email sent in the background."}
+
+
+# login route
+@router.post(
+    "/login",
+    response_model=LoginResponseSchema,
+    status_code=status.HTTP_200_OK,
+    summary="Login an existing verified employee",
+)
+async def login_employee(
+    data: LoginSchema,
+    db: AsyncSession = Depends(get_db),
+):
+    """
+    Authenticate employee and issue access & refresh tokens.
+    """
+    try:
+        result = await login(
+            email=data.email,
+            password=data.password,
+            db=db,
+        )
+
+        return {
+            "message": "Login successful",
+            **result,
+        }
+
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=str(e),
+        ) from e

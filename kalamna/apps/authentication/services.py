@@ -11,9 +11,18 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from kalamna.apps.authentication.schemas import RegisterSchema
 from kalamna.apps.business.models import Business
 from kalamna.apps.employees.models import Employee, EmployeeRole
-from kalamna.core.security import hash_password
 from kalamna.core.validation import ValidationError, validate_password
 from kalamna.utils.mailer import send_email
+from datetime import datetime, timezone
+from kalamna.apps.authentication.models import RefreshToken
+from fastapi import HTTPException, status
+from kalamna.core.security import (
+    create_access_token,
+    create_refresh_token,
+    decode_token,
+    verify_password,
+    hash_password,
+)
 
 
 async def register_business_and_owner(data: RegisterSchema, db: AsyncSession):
@@ -96,3 +105,65 @@ async def test_email(background_tasks: BackgroundTasks, email_to: list[str]):
         context={},
     )
     return {"message": "Email queued for sending"}
+
+
+async def login(
+    *,
+    email: str,
+    password: str,
+    db: AsyncSession,
+):
+    """
+    Authenticate employee and issue access & refresh tokens.
+    """
+
+    # Fetch employee by email & verify password
+    employee = await db.scalar(
+        select(Employee).where(Employee.email == email)
+    )
+
+    if not employee or not verify_password(password, employee.password):
+        raise ValueError("Invalid email or password")
+
+    # check Account is active & verified
+    if not employee.is_active or not employee.is_verified:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Account is not verified or has been disabled.",
+        )
+
+    # create tokens & decode refresh token using shared helper
+    access_token = create_access_token(
+        employee_id=str(employee.id),
+        role=employee.role.value,
+    )
+
+    refresh_token = create_refresh_token(
+        employee_id=str(employee.id),
+    )
+
+    payload = decode_token(refresh_token, audience="refresh")
+
+    refresh_jti = payload["jti"]
+    refresh_exp = datetime.fromtimestamp(
+        payload["exp"],
+        tz=timezone.utc,
+    )
+    # store refresh token in DB
+    db.add(
+        RefreshToken(
+            jti=refresh_jti,
+            employee_id=employee.id,
+            expires_at=refresh_exp,
+        )
+    )
+
+    await db.commit()
+
+    return {
+        "access_token": access_token,
+        "refresh_token": refresh_token,
+        "token_type": "bearer",
+        "expires_in": 900,
+        "role": employee.role.value,
+    }
