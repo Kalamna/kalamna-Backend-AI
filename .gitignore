@@ -207,3 +207,5 @@ marimo/_lsp/
 __marimo__/
 /kalamna/db/migrations/versions/
 
+#
+.github/prompts/*
